@@ -5,7 +5,7 @@ questions = ["1a", "1b", "4"]
 
 # Listing the directory to find the zip file
 zip_file = subprocess.run(
-    ["./script/list_zip.bat"],
+    ["powershell", "script/list_zip.bat"],
     capture_output=True,
     text=True,
     check=True).stdout
@@ -21,7 +21,7 @@ subprocess.run(
 
 # Find the recursively
 root_find = subprocess.run(
-    ["./script/find_root.bat"],
+    ["powershell", "script/find_root.bat"],
     capture_output=True,
     text=True,
     check=True).stdout.split("\\")[:-1]
@@ -31,7 +31,4 @@ print(repr(root_path))
 
 for q in questions:
         result = subprocess.run(
-            [r"./script/run_testcase.bat", root_path, q],
-            capture_output=True,
-            text=True,)
-        print(result.stdout)
+            ["powershell", "-Command", r"script/run_testcase.bat", "'" + root_path + "'", q])
