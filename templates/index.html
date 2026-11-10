@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simple Lab Helper</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">SL</div>
+      <div>
+        <p class="eyebrow">TEACHING ASSISTANT TOOL</p>
+        <h1>Simple Lab Helper</h1>
+      </div>
+      <div class="header-note"><span class="live-dot"></span> Local grading workspace</div>
+    </header>
+
+    <main class="grade-layout">
+      <aside class="settings-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">SETUP</p>
+            <h2>Solutions &amp; settings</h2>
+          </div>
+          <span class="step-badge">01</span>
+        </div>
+
+        <section class="card solution-card">
+          <div class="section-title">
+            <div class="icon-box purple">S</div>
+            <div><h3>Instructor solution</h3><p>Upload and extract a ZIP</p></div>
+          </div>
+          <label class="dropzone" id="solution-drop" for="solution-file">
+            <input id="solution-file" type="file" accept=".zip,application/zip">
+            <span class="upload-icon" aria-hidden="true">↑</span>
+            <strong>Drop solution ZIP here</strong>
+            <span>or <u>browse files</u></span>
+            <small id="solution-filename">ZIP files up to 100 MB</small>
+          </label>
+          <button class="button button-primary full-width" id="extract-solution" type="button">Extract solution</button>
+          <div class="loaded-summary" id="solution-summary">No solution loaded</div>
+          <details class="file-details">
+            <summary>Solution files <span id="solution-count">0</span></summary>
+            <ul class="file-list" id="solution-files"><li class="empty-list">No files yet</li></ul>
+          </details>
+        </section>
+
+        <section class="card mapping-card">
+          <div class="section-title mapping-heading">
+            <div class="icon-box amber">↔</div>
+            <div><h3>File comparisons</h3><p>Choose one file from each ZIP</p></div>
+          </div>
+          <div class="mapping-rows" id="mapping-rows"></div>
+          <button class="button button-quiet full-width" id="add-comparison" type="button">＋ Add comparison</button>
+          <button class="button button-dark full-width" id="save-comparisons" type="button">Save settings</button>
+          <p class="hint">The complete standard output is compared exactly. Spaces and line breaks count.</p>
+        </section>
+      </aside>
+
+      <section class="student-panel">
+        <div class="panel-heading student-heading">
+          <div>
+            <p class="eyebrow">CURRENT SUBMISSION</p>
+            <h2>Student workspace</h2>
+          </div>
+          <span class="step-badge green-badge">02</span>
+        </div>
+
+        <section class="card student-card">
+          <div class="student-upload-top">
+            <div class="section-title">
+              <div class="icon-box green">↑</div>
+              <div><h3>Student assignment</h3><p>Upload one student's ZIP at a time</p></div>
+            </div>
+            <div class="student-fields">
+              <label>Name<input id="student-name" type="text" placeholder="Student name"></label>
+              <label>Student ID<input id="student-id" type="text" placeholder="Student ID"></label>
+            </div>
+          </div>
+          <div class="student-upload-row">
+            <label class="dropzone compact-drop" id="student-drop" for="student-file">
+              <input id="student-file" type="file" accept=".zip,application/zip">
+              <span class="upload-icon" aria-hidden="true">↑</span>
+              <strong>Drop student ZIP here</strong>
+              <span>or <u>browse</u></span>
+              <small id="student-filename">No student ZIP selected</small>
+            </label>
+            <button class="button button-green extract-student" id="extract-student" type="button">Extract student ZIP</button>
+          </div>
+          <div class="workspace-files">
+            <div class="workspace-files-heading"><h3>Files in workspace</h3><span id="student-count" class="count-pill">0 files</span></div>
+            <ul class="file-list workspace-file-list" id="student-files"><li class="empty-list">Upload a student ZIP to see files here</li></ul>
+          </div>
+        </section>
+
+        <section class="results-section">
+          <div class="results-heading">
+            <div><p class="eyebrow">GRADING RESULTS</p><h2>Output comparison</h2></div>
+            <button class="button button-green run-button" id="run-comparisons" type="button"><span aria-hidden="true">▶</span> Run comparisons</button>
+          </div>
+          <div id="results-summary" class="results-summary">Extract both ZIPs, set file pairings, then run the comparisons.</div>
+          <div id="results" class="results-grid"></div>
+        </section>
+      </section>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
