@@ -19,7 +19,7 @@ async function requestJson(url, options = {}) {
   return data;
 }
 
-function addTextFileList(listElement, files, emptyMessage) {
+function addTextFileList(listElement, files, emptyMessage, basenamesOnly = false) {
   listElement.replaceChildren();
   if (!files.length) {
     const item = document.createElement('li');
@@ -30,7 +30,8 @@ function addTextFileList(listElement, files, emptyMessage) {
   }
   files.forEach((file) => {
     const item = document.createElement('li');
-    item.textContent = file;
+    item.textContent = basenamesOnly ? file.split('/').pop() : file;
+    if (basenamesOnly) item.title = file;
     listElement.append(item);
   });
 }
@@ -44,7 +45,8 @@ function fileOptions(files, selected, placeholder) {
   files.filter((file) => file.toLowerCase().endsWith('.py')).forEach((file) => {
     const option = document.createElement('option');
     option.value = file;
-    option.textContent = file;
+    option.textContent = file.split('/').pop();
+    option.title = file;
     select.append(option);
   });
   if (selected && [...select.options].some((option) => option.value === selected)) {
@@ -114,7 +116,7 @@ function renderState(state) {
   byId('student-name').value = state.student?.name || '';
   byId('student-id').value = state.student?.student_id || '';
   addTextFileList(byId('solution-files'), state.solution_files, 'No files yet');
-  addTextFileList(byId('student-files'), state.student_files, 'Upload a student ZIP to see files here');
+  addTextFileList(byId('student-files'), state.student_files, 'Upload a student ZIP to see files here', true);
   renderMappings(state);
 }
 
@@ -189,6 +191,23 @@ byId('extract-student').addEventListener('click', async (event) => {
     byId('results').replaceChildren();
     byId('results-summary').textContent = 'Student ZIP extracted. Review or add file pairings, then run the comparisons.';
     showToast('Student ZIP extracted into the workspace.');
+  } catch (error) {
+    showToast(error.message, true);
+  } finally {
+    setBusy(button, false);
+  }
+});
+
+byId('clean-workspace').addEventListener('click', async (event) => {
+  const button = event.currentTarget;
+  setBusy(button, true, 'Cleaning…');
+  try {
+    renderState(await requestJson('/api/workspace/clean', { method: 'POST' }));
+    studentInput.value = '';
+    byId('student-filename').textContent = 'No student ZIP selected';
+    byId('results').replaceChildren();
+    byId('results-summary').textContent = 'Workspace cleaned. Upload a student ZIP to start grading.';
+    showToast('Student workspace cleaned.');
   } catch (error) {
     showToast(error.message, true);
   } finally {

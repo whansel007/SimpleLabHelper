@@ -89,7 +89,20 @@ def mappings_for_solution(solution: dict[str, Any] | None) -> list[dict[str, str
     if not solution:
         return []
     all_mappings = read_json(MAPPINGS_FILE, {})
-    return all_mappings.get(solution.get("archive_hash", ""), [])
+    mappings = all_mappings.get(solution.get("archive_hash", ""), [])
+    student_files = list_files(WORKSPACE_DIR)
+    by_name: dict[str, list[str]] = {}
+    for file_name in student_files:
+        by_name.setdefault(Path(file_name).name, []).append(file_name)
+    resolved = []
+    for mapping in mappings:
+        updated = dict(mapping)
+        if updated.get("student_file") not in student_files:
+            alternatives = by_name.get(Path(updated.get("student_file", "")).name, [])
+            if len(alternatives) == 1:
+                updated["student_file"] = alternatives[0]
+        resolved.append(updated)
+    return resolved
 
 
 def get_state() -> dict[str, Any]:
@@ -120,6 +133,13 @@ def index():
 
 @app.get("/api/state")
 def api_state():
+    return jsonify(get_state())
+
+
+@app.post("/api/workspace/clean")
+def clean_workspace():
+    clean_extract_directory(WORKSPACE_DIR)
+    STUDENT_FILE.unlink(missing_ok=True)
     return jsonify(get_state())
 
 

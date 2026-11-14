@@ -62,6 +62,7 @@ button, input { font: inherit; }
 .button-dark { color: white; background: #28273e; padding: 10px; margin-top: 8px; }
 .button-green { color: #fff; background: var(--green); padding: 11px 15px; }
 .button-quiet { color: #555d70; border: 1px solid #e5e7ed; background: #fff; padding: 9px; margin-top: 8px; }
+.button-outline { color: #626b7c; border: 1px solid #e1e5e9; background: #fff; padding: 11px 13px; }
 .full-width { width: 100%; }
 .loaded-summary { color: #777f91; font-size: 9px; margin: 9px 1px 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .file-details { border-top: 1px solid #eff0f4; padding-top: 9px; margin-top: 8px; }
@@ -97,6 +98,7 @@ button, input { font: inherit; }
 .compact-drop strong { color: #3d4655; }
 .compact-drop small { position: absolute; right: 13px; bottom: 8px; max-width: 45%; }
 .extract-student { align-self: center; white-space: nowrap; }
+.clean-workspace { align-self: center; white-space: nowrap; }
 .workspace-files { border-top: 1px solid #eff0f4; margin-top: 15px; padding-top: 13px; }
 .workspace-files-heading { display: flex; align-items: center; justify-content: space-between; }
 .workspace-file-list { display: flex; flex-wrap: wrap; gap: 4px; max-height: 79px; margin-top: 8px; }
@@ -142,6 +144,7 @@ button, input { font: inherit; }
   .student-panel { padding-top: 22px; }
   .student-upload-row { align-items: stretch; flex-direction: column; }
   .extract-student { align-self: stretch; }
+  .clean-workspace { align-self: stretch; }
   .student-fields { flex-wrap: wrap; }
   .student-fields input { width: calc(50vw - 31px); }
   .results-heading { align-items: flex-start; gap: 12px; flex-direction: column; }
